@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Github, Folder, Star, Lock, MonitorPlay, Mail } from "lucide-react";
+import { ArrowUpRight, Github, Folder, Star, Lock, MonitorPlay, Mail, BookOpen } from "lucide-react";
 import { projects, profile } from "@/lib/data";
 import { Reveal } from "./ui/Reveal";
 import { SectionHeading } from "./ui/SectionHeading";
@@ -106,12 +107,21 @@ export function Projects() {
                 <div className="mt-5 flex flex-wrap gap-2 border-t border-[var(--border)] pt-4">
                   {p.proprietary ? (
                     <>
-                      <a
-                        href={demoMailto(p.title)}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-3 py-1.5 text-xs font-semibold text-black transition-transform hover:scale-[1.03]"
-                      >
-                        <MonitorPlay size={14} /> Request a demo
-                      </a>
+                      {p.caseStudy ? (
+                        <Link
+                          href={`/work/${p.caseStudy}`}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-3 py-1.5 text-xs font-semibold text-black transition-transform hover:scale-[1.03]"
+                        >
+                          <BookOpen size={14} /> Read case study
+                        </Link>
+                      ) : (
+                        <a
+                          href={demoMailto(p.title)}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-3 py-1.5 text-xs font-semibold text-black transition-transform hover:scale-[1.03]"
+                        >
+                          <MonitorPlay size={14} /> Request a demo
+                        </a>
+                      )}
                       <a
                         href={demoMailto(p.title)}
                         aria-label="Email about this project"

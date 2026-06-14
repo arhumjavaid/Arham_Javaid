@@ -10,7 +10,7 @@ export const profile = {
     "MCP & Agentic AI Builder",
   ],
   tagline:
-    "I build scalable web, mobile, and enterprise SaaS platforms — and wire them up with AI agents that actually ship.",
+    "I build multi-tenant SaaS platforms and the AI agents that run on them — in production for 10k+ users and 1,000+ automation events a day.",
   location: "Karachi, Pakistan",
   email: "arhum.javaid@gmail.com",
   phone: "+92 333-2482067",
@@ -78,6 +78,7 @@ export type Project = {
   company?: string;
   github?: string;
   demo?: string;
+  caseStudy?: string; // slug into lib/caseStudies.ts
 };
 
 export const projects: Project[] = [
@@ -98,6 +99,7 @@ export const projects: Project[] = [
     featured: true,
     proprietary: true,
     company: "Sparktrum",
+    caseStudy: "enterprise-saas-monitoring",
   },
   {
     title: "Omnichannel AI Support Platform",
@@ -116,6 +118,7 @@ export const projects: Project[] = [
     featured: true,
     proprietary: true,
     company: "Sparktrum",
+    caseStudy: "omnichannel-ai-support",
   },
   {
     title: "Centralized IAM Platform",
