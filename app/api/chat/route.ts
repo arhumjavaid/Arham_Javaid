@@ -3,6 +3,51 @@ import { knowledgeEntries, profile } from "@/lib/data";
 
 export const runtime = "nodejs";
 
+/* ------------------------------------------------------------------ *
+ * Rate limiting — protects the free Gemini quota (~15 req/min,
+ * ~1,500 req/day) and blocks abuse. When a limit is hit we DON'T error:
+ * we skip Gemini and serve the keyless local answer, so chat never breaks.
+ *
+ * NOTE: this is best-effort in-memory state. On serverless (Vercel) it
+ * resets on cold starts and isn't shared across instances — for hard
+ * guarantees use a shared store (Upstash Redis / Vercel KV). The graceful
+ * fallback above is the real backstop.
+ * ------------------------------------------------------------------ */
+const MINUTE = 60_000;
+const DAY = 86_400_000;
+const LIMITS = {
+  globalPerMinute: 12, // < Gemini free 15 RPM
+  globalPerDay: 1000, // < Gemini free 1500 RPD
+  ipPerMinute: 10,
+  ipPerDay: 50,
+};
+const MAX_MESSAGE_LEN = 500;
+
+type Bucket = { count: number; resetAt: number };
+const buckets = new Map<string, Bucket>();
+
+function underLimit(key: string, windowMs: number, max: number): boolean {
+  const now = Date.now();
+  let b = buckets.get(key);
+  if (!b || now >= b.resetAt) {
+    b = { count: 0, resetAt: now + windowMs };
+    buckets.set(key, b);
+  }
+  b.count += 1;
+  return b.count <= max;
+}
+
+// May this request call Gemini? Global caps checked first so that a globally
+// throttled request doesn't consume a visitor's personal budget.
+function mayUseGemini(ip: string): boolean {
+  return (
+    underLimit("g:min", MINUTE, LIMITS.globalPerMinute) &&
+    underLimit("g:day", DAY, LIMITS.globalPerDay) &&
+    underLimit(`ip:min:${ip}`, MINUTE, LIMITS.ipPerMinute) &&
+    underLimit(`ip:day:${ip}`, DAY, LIMITS.ipPerDay)
+  );
+}
+
 const STOP = new Set([
   "the", "a", "an", "is", "are", "of", "to", "and", "in", "on", "for", "what", "who", "how",
   "does", "do", "did", "with", "his", "he", "you", "your", "me", "my", "tell", "about", "can",
@@ -79,12 +124,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
     }
 
-    const context = retrieve(message, 4).join("\n");
-    const ai = await geminiAnswer(message, context);
+    // cap length to bound token cost per call
+    const query = message.trim().slice(0, MAX_MESSAGE_LEN);
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+
+    const context = retrieve(query, 4).join("\n");
+
+    // Only spend Gemini quota if within limits; otherwise fall back locally.
+    const allowGemini = mayUseGemini(ip);
+    const ai = allowGemini ? await geminiAnswer(query, context) : null;
 
     return NextResponse.json({
-      reply: ai || localAnswer(message),
-      mode: ai ? "gemini" : "local",
+      reply: ai || localAnswer(query),
+      mode: ai ? "gemini" : allowGemini ? "local" : "local-rate-limited",
     });
   } catch {
     return NextResponse.json({ error: "bad request" }, { status: 400 });
