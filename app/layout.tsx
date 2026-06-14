@@ -4,10 +4,15 @@ import "./globals.css";
 import { profile } from "@/lib/data";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
-const siteUrl = "https://arhamjavaid.dev";
+// Resolve to the real deploy domain so social link previews fetch the right image.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "https://arhamjavaid.dev");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

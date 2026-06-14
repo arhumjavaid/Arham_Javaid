@@ -5,8 +5,8 @@
 
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  /* Agent Terminal: headings & UI chrome are monospace */
-  --font-display: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+  /* Refined hybrid: clean modern sans for headings, mono kept for accents */
+  --font-display: var(--font-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
 
   /* phosphor-green identity */

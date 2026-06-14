@@ -32,11 +32,20 @@ function useTypewriter(words: string[]) {
     return () => clearTimeout(timeout);
   }, [text, deleting, index, words]);
 
-  return text;
+  return { text, word: words[index % words.length] };
+}
+
+// "a" vs "an" — handles vowel-starts and letter-sound acronyms (AI, MCP, LLM).
+function indefiniteArticle(role: string): "a" | "an" {
+  const first = role.trim().split(/[\s/]+/)[0];
+  if (/^[aeiou]/i.test(first)) return "an";
+  // all-caps acronyms whose first letter is read with a vowel sound
+  if (/^[A-Z]{2,}$/.test(first) && /^[afhilmnorsx]/i.test(first)) return "an";
+  return "a";
 }
 
 export function Hero() {
-  const typed = useTypewriter(profile.roles);
+  const { text: typed, word } = useTypewriter(profile.roles);
 
   return (
     <section id="top" className="relative mx-auto flex min-h-screen max-w-6xl items-center px-6 pt-28 pb-16">
@@ -46,22 +55,13 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="surface mb-5 inline-flex w-fit items-center gap-2 rounded-md px-3 py-1.5 font-[family-name:var(--font-mono)] text-xs text-muted backdrop-blur"
+        className="surface mb-6 inline-flex w-fit items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted backdrop-blur"
       >
         <span className="relative flex h-2 w-2">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent)] opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-accent)]" />
         </span>
-        status: available_for_hire
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mb-2 font-[family-name:var(--font-mono)] text-sm text-muted"
-      >
-        <span className="prompt" />whoami
+        Available for work
       </motion.div>
 
       <motion.h1
@@ -79,7 +79,7 @@ export function Hero() {
         transition={{ duration: 0.7, delay: 0.15 }}
         className="mt-3 flex min-h-[3rem] items-baseline pb-1.5 font-[family-name:var(--font-display)] text-2xl font-semibold leading-[1.3] sm:text-4xl"
       >
-        <span className="shrink-0 whitespace-nowrap text-muted">I&apos;m a&nbsp;</span>
+        <span className="shrink-0 whitespace-nowrap text-muted">I&apos;m {indefiniteArticle(word)}&nbsp;</span>
         <span className="text-[var(--fg)]">
           {typed}
           <span className="caret h-6 align-middle sm:h-8" />
@@ -103,17 +103,17 @@ export function Hero() {
       >
         <a
           href="#projects"
-          className="group inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-5 py-3 font-[family-name:var(--font-mono)] text-sm font-semibold text-black transition-transform hover:scale-[1.03] active:scale-95"
+          className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-6 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.03] active:scale-95"
         >
-          ./view_work
+          View my work
           <ArrowDown size={16} className="transition-transform group-hover:translate-y-0.5" />
         </a>
         <button
           type="button"
           onClick={() => openChat()}
-          className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-5 py-3 font-[family-name:var(--font-mono)] text-sm font-semibold transition-colors hover:border-[var(--color-accent)] hover:text-[var(--accent-ink)]"
+          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-semibold transition-colors hover:border-[var(--color-accent)] hover:text-[var(--accent-ink)]"
         >
-          ✦ ask_my_ai
+          ✦ Ask my AI
         </button>
       </motion.div>
 
@@ -121,7 +121,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.5 }}
-        className="mt-8 flex items-center gap-4 font-[family-name:var(--font-mono)] text-muted"
+        className="mt-8 flex items-center gap-4 text-muted"
       >
         <span className="inline-flex items-center gap-1.5 text-sm">
           <MapPin size={14} /> {profile.location}

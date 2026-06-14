@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { navLinks, profile } from "@/lib/data";
-import { TermMark } from "./ui/TermMark";
 import { openChat } from "@/lib/openChat";
 
 export function Nav() {
@@ -49,18 +48,20 @@ export function Nav() {
           }`}
           style={scrolled ? { backgroundColor: "color-mix(in srgb, var(--card) 80%, var(--bg))" } : {}}
         >
-          <a href="#top" className="group flex items-center gap-2 font-[family-name:var(--font-mono)] font-bold">
-            <TermMark size={32} />
-            <span className="hidden sm:inline">~/arham</span>
+          <a href="#top" className="group flex items-center gap-2.5 font-[family-name:var(--font-display)] font-bold">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-[var(--color-accent)] text-sm font-bold text-black">
+              AJ
+            </span>
+            <span className="hidden sm:inline">Arham Javaid</span>
           </a>
 
-          <div className="hidden items-center gap-1 font-[family-name:var(--font-mono)] md:flex">
+          <div className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) =>
               l.href === "#ask-ai" ? (
                 <button
                   key={l.href}
                   onClick={() => openChat()}
-                  className="rounded-md px-3 py-1.5 text-sm lowercase text-muted transition-colors hover:text-[var(--accent-ink)]"
+                  className="rounded-md px-3 py-1.5 text-sm text-muted transition-colors hover:text-[var(--fg)]"
                 >
                   {l.label}
                 </button>
@@ -68,7 +69,7 @@ export function Nav() {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="rounded-md px-3 py-1.5 text-sm lowercase text-muted transition-colors hover:text-[var(--accent-ink)]"
+                  className="rounded-md px-3 py-1.5 text-sm text-muted transition-colors hover:text-[var(--fg)]"
                 >
                   {l.label}
                 </a>

@@ -276,10 +276,8 @@ export function FloatingChat() {
                 <i style={{ background: "#ffbd2e" }} />
                 <i style={{ background: "#27c93f" }} />
               </span>
-              <span className="ml-1 font-[family-name:var(--font-mono)] text-[11px] text-muted">assistant.sh</span>
-              {!isMobile && (
-                <span className="ml-auto font-[family-name:var(--font-mono)] text-[10px] text-muted">drag · resize</span>
-              )}
+              <span className="ml-1 text-[11px] font-medium text-muted">AI Assistant</span>
+              {!isMobile && <span className="ml-auto text-[10px] text-muted">drag · resize</span>}
             </div>
 
             {/* header (drag handle) */}

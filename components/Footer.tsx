@@ -5,8 +5,8 @@ export function Footer() {
   return (
     <footer className="mx-auto max-w-6xl px-6 py-10">
       <div className="surface flex flex-col items-center justify-between gap-4 rounded-2xl px-6 py-5 sm:flex-row">
-        <p className="font-[family-name:var(--font-mono)] text-sm text-muted">
-          <span className="text-[var(--accent-ink)]">$</span> © {new Date().getFullYear()} {profile.name} · Full-Stack &amp; AI Engineer
+        <p className="text-sm text-muted">
+          © {new Date().getFullYear()} {profile.name} · Full-Stack &amp; AI Engineer
         </p>
         <div className="flex items-center gap-1">
           {[

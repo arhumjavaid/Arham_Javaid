@@ -4,27 +4,25 @@ export function SectionHeading({
   index,
   title,
   subtitle,
-  command,
 }: {
   index: string;
   title: string;
   subtitle?: string;
-  command?: string;
+  command?: string; // kept for back-compat; no longer rendered
 }) {
-  const cmd = command || `cat ${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.md`;
   return (
     <div className="mb-12">
       <Reveal>
-        <div className="mb-4 inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--bg-soft)] px-3 py-1.5 font-[family-name:var(--font-mono)] text-xs sm:text-sm">
-          <span className="prompt" />
-          <span className="text-[var(--fg)]">{cmd}</span>
-          <span className="caret-block ml-0.5" />
+        <div className="mb-3 flex items-center gap-3">
+          <span className="font-[family-name:var(--font-mono)] text-sm font-medium text-[var(--accent-ink)]">
+            {index}
+          </span>
+          <span className="h-px w-12 bg-gradient-to-r from-[var(--color-accent)] to-transparent" />
         </div>
       </Reveal>
       <Reveal delay={0.05}>
         <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight sm:text-4xl">
-          <span className="text-[var(--accent-ink)]">{index}</span>{" "}
-          <span className="text-muted">/</span> {title}
+          {title}
         </h2>
       </Reveal>
       {subtitle && (

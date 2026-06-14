@@ -10,13 +10,11 @@ import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { FloatingChat } from "@/components/FloatingChat";
 import { BootSequence } from "@/components/BootSequence";
-import { CRT } from "@/components/CRT";
 
 export default function Home() {
   return (
     <>
       <BootSequence />
-      <CRT />
       <Background />
       <Nav />
       <main className="relative">

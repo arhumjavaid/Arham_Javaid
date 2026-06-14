@@ -8,18 +8,6 @@ import { Reveal } from "./ui/Reveal";
 import { SectionHeading } from "./ui/SectionHeading";
 import { WindowBar } from "./ui/WindowBar";
 
-function fileName(p: { title: string; stack: string[] }) {
-  const slug = p.title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .split("-")
-    .slice(0, 3)
-    .join("-");
-  const ext = p.stack.includes("Python") ? "py" : p.stack.some((s) => s.includes("TypeScript")) ? "tsx" : "js";
-  return `~/work/${slug}.${ext}`;
-}
-
 function demoMailto(title: string) {
   const subject = encodeURIComponent(`Demo request — ${title}`);
   const body = encodeURIComponent(
@@ -46,7 +34,7 @@ export function Projects() {
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
               className="glow-card group overflow-hidden rounded-2xl"
             >
-              <WindowBar title={fileName(p)} />
+              <WindowBar title={p.period} />
               <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-12">
               <div className="lg:col-span-7">
                 <div className="mb-3 flex items-center gap-3">

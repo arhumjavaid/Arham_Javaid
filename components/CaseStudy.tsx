@@ -32,15 +32,15 @@ export function CaseStudy({ data }: { data: CaseStudyType }) {
         <Reveal>
           <Link
             href="/#projects"
-            className="inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-sm text-muted transition-colors hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-[var(--fg)]"
           >
-            <ArrowLeft size={15} /> cd ~/work
+            <ArrowLeft size={15} /> Back to projects
           </Link>
         </Reveal>
 
         {/* header */}
         <Reveal delay={0.05}>
-          <div className="mt-6 flex flex-wrap items-center gap-2 font-[family-name:var(--font-mono)] text-xs text-muted">
+          <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-muted">
             <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--bg-soft)] px-2 py-0.5">
               <Lock size={11} /> {data.company}
             </span>
@@ -166,7 +166,7 @@ export function CaseStudy({ data }: { data: CaseStudyType }) {
 
           <Reveal>
             <div className="glow-card overflow-hidden rounded-2xl">
-              <WindowBar title="schema-snapshot.sh" />
+              <WindowBar title="schema-snapshot" />
               <pre className="overflow-x-auto p-5 font-[family-name:var(--font-mono)] text-[11px] leading-relaxed sm:text-xs">
                 {data.deepDive.code.lines.map((line, i) => (
                   <span
@@ -197,7 +197,7 @@ export function CaseStudy({ data }: { data: CaseStudyType }) {
           <ul className="space-y-3">
             {data.takeaways.map((t, i) => (
               <Reveal key={i} delay={i * 0.04} as="li" className="flex gap-3 leading-relaxed text-muted">
-                <span className="prompt mt-1 shrink-0 font-[family-name:var(--font-mono)] text-xs" />
+                <ArrowUpRight size={16} className="mt-1 shrink-0 text-[var(--color-accent)]" />
                 <span>{t}</span>
               </Reveal>
             ))}
@@ -218,13 +218,13 @@ export function CaseStudy({ data }: { data: CaseStudyType }) {
           <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-[var(--border)] pt-8">
             <a
               href={`mailto:${profile.email}?subject=${encodeURIComponent(`Re: ${data.title}`)}`}
-              className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-5 py-3 font-[family-name:var(--font-mono)] text-sm font-semibold text-black transition-transform hover:scale-[1.03] active:scale-95"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-2)] px-6 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.03] active:scale-95"
             >
               <Mail size={16} /> Talk through this project
             </a>
             <Link
               href="/#projects"
-              className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-5 py-3 font-[family-name:var(--font-mono)] text-sm font-semibold transition-colors hover:border-[var(--color-accent)] hover:text-[var(--accent-ink)]"
+              className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-semibold transition-colors hover:border-[var(--color-accent)] hover:text-[var(--accent-ink)]"
             >
               <ArrowLeft size={16} /> Back to all work
             </Link>
